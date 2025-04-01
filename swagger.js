@@ -6,8 +6,8 @@ const doc = {
     description: 'API for managing cooking recipes and user accounts',
     version: '1.0.0'
   },
-  host: 'localhost:8080',
-  schemes: ['http', 'https'],
+  host: 'render.com/docs/web-services#port-binding',
+  schemes: ['https'],
   tags: [
     {
       name: 'Recipes',
