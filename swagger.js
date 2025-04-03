@@ -6,8 +6,8 @@ const doc = {
     description: 'API for managing cooking recipes and user accounts',
     version: '1.0.0'
   },
-  host: "localhost:8002",
-  schemes: ['http'],
+  host: "recipemgmtapi.onrender.com",
+  schemes: ['https'],
   securityDefinitions: {
     githubAuth: {
       type: 'oauth2',
