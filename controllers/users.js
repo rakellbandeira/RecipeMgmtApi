@@ -1,8 +1,9 @@
 const mongodb = require('../data/database');
 const { ObjectId } = require('mongodb');
+const bcrypt = require('bcrypt');
 
-
-
+// Number of rounds for bcrypt
+const SALT_ROUNDS = 10;
 
 // Get all users
 const getAllUsers = async (req, res) => {
@@ -89,12 +90,15 @@ const createUser = async (req, res) => {
         if (existingUser) {
         return res.status(409).json({ message: 'Email already in use' });
         }
+
     
+    const hashedPassword = await bcrypt.hash(req.body.password, SALT_ROUNDS);
 
         
     // Creating user object with additional fields
     const user = {
       ...req.body,
+      password: hashedPassword,
       created_recipes: [],
       saved_recipes: [],
       joined_date: new Date()
@@ -153,10 +157,13 @@ const updateUser = async (req, res) => {
       }
     }
     
-   if (req.body.password) {
-      delete req.body.password;
+    // Create update object
+    const updateData = { ...req.body };
+    
+    // If password is being updated, hash it first
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, SALT_ROUNDS);
     }
-
 
     
     const database = mongodb.getDatabase();
