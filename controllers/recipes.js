@@ -24,15 +24,12 @@ const getAllRecipes = async (req, res) => {
 
 // Get recipe by ID
 const getRecipeById = async (req, res) => {
-  // #swagger.tags = ['Recipes']
-  // #swagger.description = 'Endpoint to get a specific recipe by ID'
   try {
-    if (!req.params.id) {
-      return res.status(400).json({ message: 'Recipe ID is required' });
-    }
+    
     
     const database = mongodb.getDatabase();
-    const recipeId = new ObjectId(req.params.id);
+    const recipeId = new ObjectId(req.params.recipeId);
+    
     
     const recipe = await database.db().collection('recipes').findOne({ _id: recipeId });
     
@@ -115,9 +112,7 @@ const updateRecipe = async (req, res) => {
   // #swagger.tags = ['Recipes']
   // #swagger.description = 'Endpoint to update a recipe'
   try {
-    if (!req.params.id) {
-      return res.status(400).json({ message: 'Recipe ID is required' });
-    }
+    
     
     // Validating data types to be numbers
     if (req.body.prep_time && typeof req.body.prep_time !== 'number') {
@@ -133,7 +128,7 @@ const updateRecipe = async (req, res) => {
     }
     
     const database = mongodb.getDatabase();
-    const recipeId = new ObjectId(req.params.id);
+    const recipeId = new ObjectId(req.params.recipeId);
     
 
 
@@ -174,12 +169,10 @@ const deleteRecipe = async (req, res) => {
   // #swagger.tags = ['Recipes']
   // #swagger.description = 'Endpoint to delete a recipe'
   try {
-    if (!req.params.id) {
-      return res.status(400).json({ message: 'Recipe ID is required' });
-    }
+    
     
     const database = mongodb.getDatabase();
-    const recipeId = new ObjectId(req.params.id);
+    const recipeId = new ObjectId(req.params.recipeId);
     
     const result = await database.db().collection('recipes').deleteOne({ _id: recipeId });
     

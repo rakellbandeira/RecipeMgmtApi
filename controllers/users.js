@@ -35,14 +35,14 @@ const getUserById = async (req, res) => {
   // #swagger.description = 'Endpoint to get a specific user by ID'
   
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(400).json({ message: 'User ID is required' });
     }
     
     const database = mongodb.getDatabase();
-    const userId = new ObjectId(req.params.id);
+    const userId = new ObjectId(req.params.userId);
     
-    const user = await database.db().collection('users').findOne({ _id: userId });
+    const user = await database.db().collection('users').findOne({ _id: userId }); // maybe change _is to _userId?
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -129,7 +129,7 @@ const updateUser = async (req, res) => {
   // #swagger.description = 'Endpoint to update a user'
   
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(400).json({ message: 'User ID is required' });
     }
     
@@ -142,10 +142,10 @@ const updateUser = async (req, res) => {
       
       // Check if email already exists for another user
       const database = mongodb.getDatabase();
-      const userId = new ObjectId(req.params.id);
+      const userId = new ObjectId(req.params.userId);
       const existingUser = await database.db().collection('users').findOne({ 
         email: req.body.email,
-        _id: { $ne: userId }
+        _id: { $ne: userId } //Here too change?
       });
       
       if (existingUser) {
@@ -160,7 +160,7 @@ const updateUser = async (req, res) => {
 
     
     const database = mongodb.getDatabase();
-    const userId = new ObjectId(req.params.id);
+    const userId = new ObjectId(req.params.userId);
     
     const result = await database.db().collection('users').updateOne(
       { _id: userId },
@@ -190,12 +190,12 @@ const deleteUser = async (req, res) => {
   // #swagger.tags = ['Users']
   // #swagger.description = 'Endpoint to delete a user'
   try {
-    if (!req.params.id) {
+    if (!req.params.userId) {
       return res.status(400).json({ message: 'User ID is required' });
     }
     
     const database = mongodb.getDatabase();
-    const userId = new ObjectId(req.params.id);
+    const userId = new ObjectId(req.params.userId);
     
     const result = await database.db().collection('users').deleteOne({ _id: userId });
     
@@ -216,4 +216,5 @@ const deleteUser = async (req, res) => {
 
 
 
-module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser};
+module.exports = { getAllUsers, getUserById, createUser, updateUser, deleteUser
+};
